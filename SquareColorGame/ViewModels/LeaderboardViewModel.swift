@@ -1,6 +1,6 @@
 import SwiftUI
 import Combine
 
-class LeaderboardViewModel: ObservableObject {
-    // Your code here
+class LeaderboardViewModel {
+    // ViewModel logic here
 }

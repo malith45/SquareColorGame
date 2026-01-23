@@ -1,55 +1,22 @@
-import UIKit
+import Foundation
 
 class HapticManager {
     static let shared = HapticManager()
 
-    private init() {}
-
-    func impact(style: ImpactStyle) {
-        let generator: UIImpactFeedbackGenerator
-
-        switch style {
-        case .light:
-            generator = UIImpactFeedbackGenerator(style: .light)
-        case .medium:
-            generator = UIImpactFeedbackGenerator(style: .medium)
-        case .heavy:
-            generator = UIImpactFeedbackGenerator(style: .heavy)
-        }
-
-        generator.prepare()
-        generator.impactOccurred()
-    }
-
-    func notification(type: NotificationType) {
+    func notification(type: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
-        generator.prepare()
-
-        switch type {
-        case .success:
-            generator.notificationOccurred(.success)
-        case .error:
-            generator.notificationOccurred(.error)
-        case .warning:
-            generator.notificationOccurred(.warning)
-        }
+        generator.notificationOccurred(type)
     }
 
-    func selection() {
-        let generator = UISelectionFeedbackGenerator()
-        generator.prepare()
-        generator.selectionChanged()
+    func success() {
+        notification(type: .success)
     }
 
-    enum ImpactStyle {
-        case light
-        case medium
-        case heavy
+    func error() {
+        notification(type: .error)
     }
 
-    enum NotificationType {
-        case success
-        case error
-        case warning
+    func warning() {
+        notification(type: .warning)
     }
 }

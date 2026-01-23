@@ -1,1 +1,55 @@
-//\n//  HapticManager.swift\n//  SquareColorGame\n//\n//  Created on 2026-01-17\n//\n\n#if canImport(UIKit)\nimport UIKit\n#endif\nimport SwiftUI\n\nclass HapticManager {\n    static let shared = HapticManager()\n    \n    private init() {}\n    \n    func impact(_ style: ImpactStyle) {\n        #if canImport(UIKit)\n        let generator = UIImpactFeedbackGenerator(style: style.uiKitStyle)\n        generator.impactOccurred()\n        #endif\n    }\n    \n    func notification(_ type: NotificationType) {\n        #if canImport(UIKit)\n        let generator = UINotificationFeedbackGenerator()\n        generator.notificationOccurred(type.uiKitType)\n        #endif\n    }\n    \n    func selection() {\n        #if canImport(UIKit)\n        let generator = UISelectionFeedbackGenerator()\n        generator.selectionChanged()\n        #endif\n    }\n    \n    // Convenience methods\n    func success() {\n        notification(.success)\n    }\n    \n    func error() {\n        notification(.error)\n    }\n    \n    func warning() {\n        notification(.warning)\n    }\n    \n    // Cross-platform wrapper types\n    enum ImpactStyle {\n        case light, medium, heavy, soft, rigid\n        \n        #if canImport(UIKit)\n        var uiKitStyle: UIImpactFeedbackGenerator.FeedbackStyle {\n            switch self {\n            case .light: return .light\n            case .medium: return .medium\n            case .heavy: return .heavy\n            case .soft: return .soft\n            case .rigid: return .rigid\n            }\n        }\n        #endif\n    }\n    \n    enum NotificationType {\n        case success, warning, error\n        \n        #if canImport(UIKit)\n        var uiKitType: UINotificationFeedbackGenerator.FeedbackType {\n            switch self {\n            case .success: return .success\n            case .warning: return .warning\n            case .error: return .error\n            }\n        }\n        #endif\n    }\n}
+import UIKit
+
+class HapticManager {
+    static let shared = HapticManager()
+
+    private init() {}
+
+    func impact(style: ImpactStyle) {
+        let generator: UIImpactFeedbackGenerator
+
+        switch style {
+        case .light:
+            generator = UIImpactFeedbackGenerator(style: .light)
+        case .medium:
+            generator = UIImpactFeedbackGenerator(style: .medium)
+        case .heavy:
+            generator = UIImpactFeedbackGenerator(style: .heavy)
+        }
+
+        generator.prepare()
+        generator.impactOccurred()
+    }
+
+    func notification(type: NotificationType) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.prepare()
+
+        switch type {
+        case .success:
+            generator.notificationOccurred(.success)
+        case .error:
+            generator.notificationOccurred(.error)
+        case .warning:
+            generator.notificationOccurred(.warning)
+        }
+    }
+
+    func selection() {
+        let generator = UISelectionFeedbackGenerator()
+        generator.prepare()
+        generator.selectionChanged()
+    }
+
+    enum ImpactStyle {
+        case light
+        case medium
+        case heavy
+    }
+
+    enum NotificationType {
+        case success
+        case error
+        case warning
+    }
+}

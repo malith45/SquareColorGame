@@ -5,6 +5,7 @@
 //  Created on 2026-01-17
 //
 
+import UIKit
 import SwiftUI
 
 struct ColorGenerator {
